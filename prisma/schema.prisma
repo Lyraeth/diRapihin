@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String        @id @default(uuid())
+  username       String        @unique
+  password       String
+  role           Role
+  statuses       OrderStatus[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  orders         Order[]       @relation("UserOrders")
+  assignedOrders Order[]       @relation("OrderAdmin")
+}
+
+model Order {
+  id           String        @id @default(uuid())
+  user         User          @relation(fields: [userId], references: [id], name: "UserOrders")
+  userId       String
+  orderDetails String
+  status       OrderStatus[]
+  admin        User?         @relation("OrderAdmin", fields: [adminId], references: [id])
+  adminId      String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model OrderStatus {
+  id          String   @id @default(uuid())
+  order       Order    @relation(fields: [orderId], references: [id])
+  orderId     String
+  status      String
+  updatedBy   User     @relation(fields: [updatedById], references: [id])
+  updatedById String
+  updatedAt   DateTime @default(now())
+}
+
+enum Role {
+  User
+  Admin
+}
