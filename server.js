@@ -9,9 +9,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const { controllerUsers } = require("./routes/users/users.controller");
+
 app.get("/", async (req, res) => {
   res.send("Welcome to diRapihin");
 });
+
+app.use("/api/users/", controllerUsers);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is already running at ${PORT}`);

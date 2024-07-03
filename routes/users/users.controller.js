@@ -1,0 +1,68 @@
+const express = require("express");
+const controllerUsers = express.Router();
+
+const {
+  getAllUsers,
+  getUniqueUser,
+  createUser,
+  editUserById,
+  deleteUserById,
+} = require("./users.service");
+
+controllerUsers.get("/", async (req, res) => {
+  const users = await getAllUsers();
+
+  res.send(users);
+});
+
+controllerUsers.get("/:id", async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const user = await getUniqueUser(parseInt(userId));
+
+    res.send(user);
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+});
+
+controllerUsers.post("/", async (req, res) => {
+  try {
+    const newUserData = req.body;
+
+    const user = await createUser(newUserData);
+
+    res.send({
+      data: user,
+      message: "Create user success",
+    });
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+});
+
+controllerUsers.put("/:id", async (req, res) => {
+  const userId = req.params.id;
+  const userData = req.body;
+
+  const user = await editUserById(userId, userData);
+
+  res.send({
+    data: user,
+    message: "Edit user success",
+  });
+});
+
+controllerUsers.delete("/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    await deleteUserById(userId);
+
+    res.send("User deleted");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+module.exports = { controllerUsers };
