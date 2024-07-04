@@ -47,7 +47,6 @@ loginController.post("/", async (req, res) => {
     const token = jwt.sign(payload, secret, { expiresIn: expires });
 
     res.cookie("token", token, { httpOnly: true }).send({
-      token: token,
       message: "Login successful",
     });
   } else {
