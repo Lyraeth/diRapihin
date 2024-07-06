@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { prisma } = require("../config/prisma");
 
-async function authenticateToken(req, res, next) {
+async function authenticateTokenAdmin(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) return res.status(401).send({ message: "Unauthorized" });
@@ -28,4 +28,4 @@ async function authenticateToken(req, res, next) {
   }
 }
 
-module.exports = authenticateToken;
+module.exports = authenticateTokenAdmin;

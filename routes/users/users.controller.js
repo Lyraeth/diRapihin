@@ -1,6 +1,6 @@
 const express = require("express");
 const controllerUsers = express.Router();
-const authenticateToken = require("../../middleware/auth");
+const authenticateTokenAdmin = require("../../middleware/authAdmin");
 
 const {
   getAllUsers,
@@ -10,13 +10,13 @@ const {
   deleteUserById,
 } = require("./users.service");
 
-controllerUsers.get("/", authenticateToken, async (req, res) => {
+controllerUsers.get("/", authenticateTokenAdmin, async (req, res) => {
   const users = await getAllUsers();
 
   res.send(users);
 });
 
-controllerUsers.get("/:id", authenticateToken, async (req, res) => {
+controllerUsers.get("/:id", authenticateTokenAdmin, async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
     const user = await getUniqueUser(parseInt(userId));
