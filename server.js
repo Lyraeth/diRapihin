@@ -11,8 +11,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+// Middleware
 const authenticateTokenUser = require("./middleware/authUser");
 const authenticateTokenAdmin = require("./middleware/authAdmin");
+
+// Controller
 const { controllerUsers } = require("./routes/users/users.controller");
 const { controllerOrders } = require("./routes/orders/orders.controller");
 const {
@@ -25,11 +28,10 @@ app.get("/", async (req, res) => {
   res.send("Welcome to diRapihin");
 });
 
-// Controller
+app.use("/login", loginController);
 app.use("/api/users", controllerUsers);
 app.use("/api/orders", authenticateTokenUser, controllerOrders);
 app.use("/api/order-statuses", authenticateTokenAdmin, controllerOrderStatuses);
-app.use("/login", loginController);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is already running at ${PORT}`);
